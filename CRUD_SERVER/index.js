@@ -1,6 +1,12 @@
+//set dns manually
+const dns = require('dns')
+dns.setServers(['1.1.1.1', '8.8.8.8'])
+
+
 const express = require("express");
 const cors = require("cors");
 require('dotenv').config()
+
 
 const app = express();
 app.use(express.json());
