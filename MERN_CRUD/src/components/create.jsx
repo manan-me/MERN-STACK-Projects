@@ -10,7 +10,7 @@ function CreateUser() {
 
   const submit = (e) => {
     e.preventDefault();
-    axios.post("http://localhost:8000/create", { name, email, age })
+    axios.post("https://mern-stack-projects-production.up.railway.app/create", { name, email, age })
     .then((r)=>{
         console.log(r)
         setName('')

@@ -11,7 +11,7 @@ function CreateUser() {
   const {id}=useParams()
 
   useEffect(()=>{
-        axios.get('http://localhost:8000/getUser/'+id)
+        axios.get('https://mern-stack-projects-production.up.railway.app/getUser/'+id)
         .then((res)=>{
             setName(res.data.name)
             setEmail(res.data.email)
@@ -23,7 +23,7 @@ function CreateUser() {
 
   const submit = (e) => {
     e.preventDefault();
-    axios.post("http://localhost:8000/update/"+id , { name, email, age })
+    axios.post("https://mern-stack-projects-production.up.railway.app/update/"+id , { name, email, age })
     .then((r)=>{
         console.log(r)
         setName('')

@@ -6,7 +6,7 @@ function User() {
     const [users, setUsers] = useState([])
 
     useEffect(()=>{
-        axios.get('http://localhost:8000/')
+        axios.get('https://mern-stack-projects-production.up.railway.app/')
         .then((res)=>setUsers(res.data))
         .catch((e)=>{console.log(e);
         })
@@ -14,7 +14,7 @@ function User() {
 
 
     const handleDelete=(id)=>{
-        axios.delete(`http://localhost:8000/delete/${id}`)
+        axios.delete(`https://mern-stack-projects-production.up.railway.app/delete/${id}`)
         .then(()=>{console.log(`deleted user of id ${id}`)
         setUsers(users.filter((u) => u._id !== id))
         })
