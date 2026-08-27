@@ -1,8 +1,8 @@
 const { Schema, model } = require("mongoose");
 const validator = require("validator");
-const bcrypt=require("bcryptjs");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
+const crypto = require("crypto");
 
 const userSchema = new Schema(
   {
@@ -38,7 +38,7 @@ const userSchema = new Schema(
 
     role: {
       type: String,
-      default: "user",
+      default: "NORMAL",
     },
     resetPasswordToken: String,
     resetPasswordExpire: Date,
@@ -46,25 +46,40 @@ const userSchema = new Schema(
   { timestamps: true },
 );
 
-userSchema.pre("save",async function(next){
-    if(!this.isModified("password")){
-        next()
-    }
-    this.password=await bcrypt.hash(this.password,10)
-})
-
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
+    next();
+  }
+  this.password = await bcrypt.hash(this.password, 10);
+});
 
 //jwt tokens
-userSchema.methods.getJWTToken=function (){
-    return jwt.sign({id:this._id},process.env.JWT_SECRET,{
-        expiresIn:process.env.JWT_EXPIRE
-    })
-}
+userSchema.methods.getJWTToken = function () {
+  return jwt.sign({ id: this._id, role: this.role }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRE,
+  });
+};
 
 //comparing password
-userSchema.methods.comparePassword=async function (enteredPassword){
-    return await bcrypt.compare(enteredPassword,this.password)
-}
+userSchema.methods.comparePassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
+
+//Reset Password function
+userSchema.methods.getResetPasswordToken = function () {
+  //Generte Token
+  const resetToken = crypto.randomBytes(20).toString("hex");
+
+  //hashing and adding to user schema
+  this.resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  this.resetPasswordExpire=Date.now()+15*60*1000
+
+  return resetToken
+};
 
 const user = model("user", userSchema);
 

@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const mongoose=require("mongoose")
 
 const productSchema = new Schema({
   name: {
@@ -15,7 +16,7 @@ const productSchema = new Schema({
     required: [true, "Please enter Product Price"],
     maxLength: [8, "Price Cannot exceed 8 characters"],
   },
- 
+
   rating: {
     type: Number,
     default: 0,
@@ -62,12 +63,17 @@ const productSchema = new Schema({
       },
     },
   ],
+  user: {
+    type: mongoose.Schema.ObjectId,
+    ref: "User",
+    required: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now(),
   },
 });
 
-const products=model('products',productSchema)
+const products = model("products", productSchema);
 
-module.exports=products
+module.exports = products;

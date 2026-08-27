@@ -7,15 +7,17 @@ const {
   handleGetSingleProduct,
 } = require("../Controllers/productControllers");
 const router = express.Router();
+const {isAuthenticated, restrictTo} =require ("../Middleware/auth")
+
 
 router.get("/products", handleGetAllProducts);
 
-router.post("/createProduct", handleCreateProduct);
+router.post("/createProduct",isAuthenticated,restrictTo(['ADMIN']), handleCreateProduct);
 
 router
   .route("/product/:id")
-  .put(handleUpdateProduct)
-  .delete(handleDeleteProduct)
-  .get(handleGetSingleProduct)
+  .put(isAuthenticated,restrictTo(['ADMIN']),handleUpdateProduct)
+  .delete(isAuthenticated,restrictTo(['ADMIN']),handleDeleteProduct)
+  .get(isAuthenticated,restrictTo(['ADMIN',"NORMAL"]),handleGetSingleProduct)
 
 module.exports = router;
