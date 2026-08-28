@@ -5,19 +5,37 @@ const {
   handleCreateProduct,
   handleUpdateProduct,
   handleGetSingleProduct,
+  handleReview,
+  handleDeleteReview,
+  handleGetAllReviews,
 } = require("../Controllers/productControllers");
 const router = express.Router();
-const {isAuthenticated, restrictTo} =require ("../Middleware/auth")
-
+const { isAuthenticated, restrictTo } = require("../Middleware/auth");
 
 router.get("/products", handleGetAllProducts);
 
-router.post("/createProduct",isAuthenticated,restrictTo(['ADMIN']), handleCreateProduct);
+router.post(
+  "/admin/createProduct",
+  isAuthenticated,
+  restrictTo(["ADMIN"]),
+  handleCreateProduct,
+);
 
 router
-  .route("/product/:id")
-  .put(isAuthenticated,restrictTo(['ADMIN']),handleUpdateProduct)
-  .delete(isAuthenticated,restrictTo(['ADMIN']),handleDeleteProduct)
-  .get(isAuthenticated,restrictTo(['ADMIN',"NORMAL"]),handleGetSingleProduct)
+  .route("/admin/product/:id")
+  .put(isAuthenticated, restrictTo(["ADMIN"]), handleUpdateProduct)
+  .delete(isAuthenticated, restrictTo(["ADMIN"]), handleDeleteProduct);
+
+router.get(
+  "/product/:id",
+  isAuthenticated,
+  restrictTo(["ADMIN", "NORMAL"]),
+  handleGetSingleProduct,
+);
+
+router.put("/review/:id", isAuthenticated, handleReview);
+
+router.get("/reviews",handleGetAllReviews)
+router.delete("/reviews",isAuthenticated,handleDeleteReview)
 
 module.exports = router;

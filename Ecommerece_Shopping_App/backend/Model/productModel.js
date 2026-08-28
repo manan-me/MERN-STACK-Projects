@@ -1,5 +1,5 @@
 const { Schema, model } = require("mongoose");
-const mongoose=require("mongoose")
+const mongoose = require("mongoose");
 
 const productSchema = new Schema({
   name: {
@@ -17,7 +17,7 @@ const productSchema = new Schema({
     maxLength: [8, "Price Cannot exceed 8 characters"],
   },
 
-  rating: {
+  ratings: {
     type: Number,
     default: 0,
   },
@@ -51,6 +51,11 @@ const productSchema = new Schema({
     {
       name: {
         type: String,
+        required: true,
+      },
+      user: {
+        type: mongoose.Schema.ObjectId,
+        ref: "User",
         required: true,
       },
       rating: {

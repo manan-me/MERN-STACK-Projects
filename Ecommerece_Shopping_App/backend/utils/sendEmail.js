@@ -3,12 +3,12 @@ const nodeMiler=require("nodemailer")
 const sendEmail=async function(options){
  
     const transporter=nodeMiler.createTransport({
-        host:process.env.SMTP_HOST,
-        port:process.env.SMTP_PORT,
+        // host:process.env.SMTP_HOST,
+        // port:process.env.SMTP_PORT,
         service:process.env.SMTP_SERVICE,
         auth:{
             user:process.env.SMTP_MAIL,
-            password:process.env.SMTP_PASSWORD
+            pass:process.env.SMTP_PASSWORD
         }
     })
 
