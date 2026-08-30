@@ -6,6 +6,5 @@ import App from './App.jsx'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <App />
-<h1 className="text-3xl font-bold text-red-500">Test</h1>
   </StrictMode>,
 )
