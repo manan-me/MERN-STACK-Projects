@@ -14,6 +14,11 @@ process.on("uncaughtException",(error)=>{
 //config
  dotenv.config({path:'Server/config/config.env'})  
 
+ //DB Connecction
+ const MongooseConnect=require('./config/dbConection')
+ MongooseConnect(process.env.DB_URL).then((data)=>{
+    console.log(`Mongodb connected with server: ${data.connection.host}`) })
+
 
 
  //Running on port
