@@ -38,6 +38,9 @@ userSchema.methods.getJWTToken=function(){
         expiresIn:process.env.JWT_EXPIRE
     }  )
 }
+userSchema.methods.comparePassword=async function(enteredPassword){
+    return await bcrypt.compare(enteredPassword,this.password)
+}
 
 const User=model("User",userSchema)
 module.exports=User

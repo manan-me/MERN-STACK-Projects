@@ -16,4 +16,28 @@ const handleSignUp = catchAsyncErrors(async (req, res, next) => {
  sendToken(user, 201, res);
 
 });
-module.exports = { handleSignUp };
+
+//Login a user
+const handleSignIn=catchAsyncErrors(async (req,res,next)=>{
+  const { email, password } = req.body;
+
+  //check if user gived email and password both
+  if (!email || !password) {
+    return next(new ErrorHandler("Pleaseenter email and password both", 400));
+  }
+  const user = await User.findOne({ email }).select("+password");
+  console.log(user.password) // should show hashed string, not undefined
+
+  if (!user) {
+    return next(new ErrorHandler("Invalid email or password", 401));
+  }
+
+  const isPasswordMatched =await user.comparePassword(password);
+
+  if (!isPasswordMatched) {
+    return next(new ErrorHandler("Invalid email or password", 401));
+  }
+  sendToken(user, 201, res);
+});
+
+module.exports = { handleSignUp, handleSignIn };

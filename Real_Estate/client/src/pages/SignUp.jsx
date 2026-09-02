@@ -57,22 +57,22 @@ function SignUp() {
   }
 
   return (
-    <div className="p-3 max-w-lg mx-auto">
-      <h1 className="text-3xl text-center font-semibold my-7">Sign Up</h1>
-      <form onSubmit={handleSubmit}  className="flex flex-col gap-4">
-        <input id='username' value={formData.username} onChange={handleChange} type="text" placeholder="Enter Your Username" className="border p-3 rounded-lg" />
-        <input id='email' value={formData.email} onChange={handleChange} type="text" placeholder="Enter Your email" className="border p-3 rounded-lg" />
-        <input id='password' value={formData.password} onChange={handleChange} type="text" placeholder="Enter Your password" className="border p-3 rounded-lg" />
-        <button type="submit" disabled={loading} className="uppercase bg-slate-700 text-white p-3 rounded-lg hover:opacity-95">
-          {loading ? 'Signing Up...' : 'Sign Up'}
-        </button>
-        {error && <p className="text-red-500 text-sm">{error}</p>}
-      </form>
-      <div className="flex gap-2 mt-5">
-        <p>Have an account?</p>
-        <Link to={"/sign-in"} className="text-blue-700">Sign In</Link>
-      </div>
-    </div>
+   <div className="p-6 max-w-lg mx-auto mt-10 sm:mt-20">
+  <h1 className="text-3xl text-center font-semibold my-7">Sign Up</h1>
+  <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <input id='username' value={formData.username} onChange={handleChange} type="text" placeholder="Enter Your Username" className="border p-3 rounded-lg text-sm w-full" />
+    <input id='email' value={formData.email} onChange={handleChange} type="text" placeholder="Enter Your email" className="border p-3 rounded-lg text-sm w-full" />
+    <input id='password' value={formData.password} onChange={handleChange} type="text" placeholder="Enter Your password" className="border p-3 rounded-lg text-sm w-full" />
+    <button type="submit" disabled={loading} className="uppercase bg-slate-700 text-white p-3 rounded-lg hover:opacity-95 disabled:opacity-70 w-full">
+      {loading ? 'Signing Up...' : 'Sign Up'}
+    </button>
+    {error && <p className="text-red-500 text-sm">{error}</p>}
+  </form>
+  <div className="flex gap-2 mt-5 text-sm">
+    <p>Have an account?</p>
+    <Link to={"/sign-in"} className="text-blue-700">Sign In</Link>
+  </div>
+</div>
   )
 }
 
