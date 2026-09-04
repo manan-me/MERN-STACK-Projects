@@ -2,42 +2,64 @@ const catchAsyncErrors = require("../Middleware/catchAsyncError");
 const User = require("../Model/user");
 const ErrorHandler = require("../utils/errorHandler");
 const sendToken = require("../utils/sendToken");
+const bcrypt=require("bcrypt")
 
 const handleSignUp = catchAsyncErrors(async (req, res, next) => {
- const { username, email, password } = req.body;
- 
+  const { username, email, password } = req.body;
 
- const user = await User.create({
-   username,
-   email,
-   password,
- });
+  const user = await User.create({
+    username,
+    email,
+    password,
+  });
 
- sendToken(user, 201, res);
-
+  sendToken(user, 201, res);
 });
 
 //Login a user
-const handleSignIn=catchAsyncErrors(async (req,res,next)=>{
+const handleSignIn = catchAsyncErrors(async (req, res, next) => {
   const { email, password } = req.body;
 
   //check if user gived email and password both
   if (!email || !password) {
-    return next(new ErrorHandler("Pleaseenter email and password both", 400));
+    return next(new ErrorHandler("Please enter email and password both", 400));
   }
   const user = await User.findOne({ email }).select("+password");
-  console.log(user.password) // should show hashed string, not undefined
+  console.log(user.password); // should show hashed string, not undefined
 
   if (!user) {
     return next(new ErrorHandler("Invalid email or password", 401));
   }
 
-  const isPasswordMatched =await user.comparePassword(password);
+  const isPasswordMatched = await user.comparePassword(password);
 
   if (!isPasswordMatched) {
     return next(new ErrorHandler("Invalid email or password", 401));
   }
+
   sendToken(user, 201, res);
 });
 
-module.exports = { handleSignUp, handleSignIn };
+//handle signIn using google
+const handleGoogleSignIn = catchAsyncErrors(async (req, res, next) => {
+  const { username, email, photoURL } = req.body;
+  const user = await User.findOne({ email });
+  if (user) {
+    sendToken(user, 201, res);
+  } else {
+    const generatedPassword = Math.random().toString(36).slice(-8);
+    const hashedPassword = await bcrypt.hash(generatedPassword, 10);
+    const newUser = await User.create({
+      username:
+        username.split(" ").join("").toLowerCase() +
+        Math.floor(Math.random() * 9000 + 1000),
+
+      email,
+      password: hashedPassword,
+      avatar: photoURL,
+    });
+    sendToken(newUser, 201, res);
+  }
+});
+
+module.exports = { handleSignUp, handleSignIn, handleGoogleSignIn };

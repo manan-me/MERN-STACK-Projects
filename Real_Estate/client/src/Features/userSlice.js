@@ -1,4 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit"
+import { REHYDRATE } from "redux-persist"
 const initialState={
     currentUser:null,
     loading:false,
@@ -20,7 +21,13 @@ const userSlice=createSlice({
             state.loading=false,
             state.error=action.payload
         }
-    }
+    },
+     extraReducers: (builder) => {
+    builder.addCase(REHYDRATE, (state) => {
+      state.error = null  
+      state.loading = false
+    })
+  }
 })
 
 export const {signInStart,signInSuccess,signInFailure}=userSlice.actions

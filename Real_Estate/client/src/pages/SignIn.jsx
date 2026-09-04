@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {signInStart,signInSuccess,signInFailure} from  "../Features/userSlice";
+import OAuth from "../Components/OAuth";
 function SignUp() {
   const [formData, setFormData] = useState({
     email: "",
@@ -76,6 +77,7 @@ function SignUp() {
         >
           {loading ? "Signing In..." : "Sign In"}
         </button>
+        <OAuth/>
         {error && <p className="text-red-500 text-sm">{error}</p>}
       </form>
       <div className="flex gap-2 mt-5 text-sm">

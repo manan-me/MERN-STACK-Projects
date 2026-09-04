@@ -21,6 +21,10 @@ const userSchema=new Schema({
         select:false,
         minLength:[8,"Password should be greater than 8 characters"]
     },
+    avatar: {
+      type: String,
+      default:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSti0Krop_9RKjXIviYcR1PQoGEOErns-ruuQnYkgUDmA&s"
+    },
       role: {
       type: String,
       default: "USER",
