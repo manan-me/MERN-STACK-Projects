@@ -23,9 +23,12 @@ const userSlice=createSlice({
         }
     },
      extraReducers: (builder) => {
-    builder.addCase(REHYDRATE, (state) => {
+    builder.addCase(REHYDRATE, (state,action) => {
       state.error = null  
       state.loading = false
+       if (action.payload?.user?.currentUser) {
+      state.currentUser = action.payload.user.currentUser
+    }
     })
   }
 })

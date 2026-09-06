@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {signInStart,signInSuccess,signInFailure} from  "../Features/userSlice";
 import OAuth from "../Components/OAuth";
-function SignUp() {
+function SignIn() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -43,7 +43,7 @@ function SignUp() {
       }
 
       console.log(data);
-     dispatch(signInSuccess(data));
+     dispatch(signInSuccess(data.user));
       navigate("/");
     } catch (err) {
       dispatch(signInFailure("Something went wrong. Please try again." + "/n/n!!!" + err.message));
@@ -90,4 +90,4 @@ function SignUp() {
   );
 }
 
-export default SignUp;
+export default SignIn;
