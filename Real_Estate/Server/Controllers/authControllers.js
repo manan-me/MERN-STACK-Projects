@@ -61,4 +61,18 @@ const handleGoogleSignIn = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
-module.exports = { handleSignUp, handleSignIn, handleGoogleSignIn };
+//update user profile
+const updateUser = catchAsyncErrors(async (req, res, next) => {
+  const updates = { ...req.body }
+
+  if (req.file) {
+    updates.avatar = req.file.path  // cloudinary URL
+  }
+  
+
+  const user = await User.findByIdAndUpdate(req.params.id, updates, { returnDocument: 'after' })
+    sendToken(user, 201, res);
+
+})
+
+module.exports = { handleSignUp, handleSignIn, handleGoogleSignIn, updateUser };

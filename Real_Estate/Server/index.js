@@ -1,4 +1,8 @@
 const dotenv=require('dotenv')
+
+// Load configuration before importing modules that read environment variables.
+dotenv.config({path:'Server/config/config.env'})
+
 const app=require('./app')
 
 //handling uncaught error
@@ -10,9 +14,6 @@ process.on("uncaughtException",(error)=>{
 
 })
 
-
-//config
- dotenv.config({path:'Server/config/config.env'})  
 
  //DB Connecction
  const MongooseConnect=require('./config/dbConection')
