@@ -75,4 +75,26 @@ const updateUser = catchAsyncErrors(async (req, res, next) => {
 
 })
 
-module.exports = { handleSignUp, handleSignIn, handleGoogleSignIn, updateUser };
+//delete user profile
+const deleteUser = catchAsyncErrors(async (req, res, next) => {
+  const user = await User.findByIdAndDelete(req.params.id);
+  if (!user) {
+    return next(new ErrorHandler("User not found", 404));
+  }
+  res.status(200).json({
+    success: true,
+    message: "User deleted successfully"
+  });
+});
+
+//hanlde sign out
+const handleSignOut = catchAsyncErrors(async (req, res, next) => {
+  res.clearCookie("token", {
+    httpOnly: true,});
+  res.status(200).json({
+    success: true,
+    message: "Logged out successfully"
+  });
+})
+
+module.exports = { handleSignUp, handleSignIn, handleGoogleSignIn, updateUser, deleteUser, handleSignOut };

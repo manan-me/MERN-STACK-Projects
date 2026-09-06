@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
+import {signOut} from "../Features/userSlice";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useState, useRef } from "react";
 import { signInSuccess } from "../Features/userSlice";
@@ -70,6 +71,40 @@ function Profile() {
     }
   };
 
+
+  const handleDeleteAccount = async () => {
+    if (!window.confirm("Are you sure you want to delete your account? This action cannot be undone.")) return;
+    try {
+      const res = await fetch(`/api/auth/delete/${currentUser._id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      });
+      const result = await res.json();
+      if (!result.success) return;
+      dispatch(signOut());
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+
+
+  const handleSignOut = async () => {
+    try {
+      const  res= await fetch("/api/auth/sign-out", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+      const result =  await res.json();
+      if (!result.success) return;
+      dispatch(signOut());
+    }
+    
+    catch (err) {
+      console.log(err);
+    }
+  }
+
   return (
     <div className="p-6 max-w-md mx-auto mt-10">
       <h1 className="text-2xl font-bold text-slate-800 mb-8 text-center">Your Profile</h1>
@@ -91,8 +126,8 @@ function Profile() {
         <button type="submit" className="bg-slate-800 text-white p-3 rounded-xl text-sm font-medium hover:bg-slate-700 transition mt-1">Update Profile</button>
       </form>
       <div className="flex justify-between mt-6 text-sm">
-        <span className="text-red-400 cursor-pointer hover:underline">Delete Account</span>
-        <span className="text-slate-500 cursor-pointer hover:underline">Sign Out</span>
+        <span onClick={handleDeleteAccount} className="text-red-400 cursor-pointer hover:underline">Delete Account</span>
+        <span onClick={handleSignOut} className="text-slate-500 cursor-pointer hover:underline">Sign Out</span>
       </div>
     </div>
   );

@@ -20,6 +20,9 @@ const userSlice=createSlice({
         signInFailure:(state,action)=>{
             state.loading=false,
             state.error=action.payload
+        },
+        signOut:(state)=>{
+            state.currentUser=null
         }
     },
      extraReducers: (builder) => {
@@ -33,5 +36,5 @@ const userSlice=createSlice({
   }
 })
 
-export const {signInStart,signInSuccess,signInFailure}=userSlice.actions
+export const {signInStart,signInSuccess,signInFailure,signOut}=userSlice.actions
 export default userSlice.reducer
