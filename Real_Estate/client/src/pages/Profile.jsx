@@ -1,8 +1,9 @@
 import { useSelector, useDispatch } from "react-redux";
-import {signOut} from "../Features/userSlice";
+import { signOut } from "../Features/userSlice";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useState, useRef } from "react";
 import { signInSuccess } from "../Features/userSlice";
+import { Link } from "react-router-dom";
 
 function Profile() {
   const fileRef = useRef(null);
@@ -15,7 +16,7 @@ function Profile() {
   const [formData, setFormData] = useState({
     username: currentUser.username,
     email: currentUser.email,
-    password: ""
+    password: "",
   });
 
   const handleFileUpload = async (file) => {
@@ -34,7 +35,10 @@ function Profile() {
       });
       console.log(currentUser._id);
       const result = await res.json();
-      if (!result.success) { setUploadError(result.message); return; }
+      if (!result.success) {
+        setUploadError(result.message);
+        return;
+      }
       dispatch(signInSuccess(result.user));
     } catch (err) {
       setUploadError("Upload failed. Try again." + err.message);
@@ -64,16 +68,20 @@ function Profile() {
       if (!result.success) return;
       dispatch(signInSuccess(result.user));
       setFormData({
-        password: ""
+        password: "",
       });
     } catch (err) {
       console.log(err);
     }
   };
 
-
   const handleDeleteAccount = async () => {
-    if (!window.confirm("Are you sure you want to delete your account? This action cannot be undone.")) return;
+    if (
+      !window.confirm(
+        "Are you sure you want to delete your account? This action cannot be undone.",
+      )
+    )
+      return;
     try {
       const res = await fetch(`/api/auth/delete/${currentUser._id}`, {
         method: "DELETE",
@@ -87,47 +95,105 @@ function Profile() {
     }
   };
 
-
-
   const handleSignOut = async () => {
     try {
-      const  res= await fetch("/api/auth/sign-out", {
+      const res = await fetch("/api/auth/sign-out", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
       });
-      const result =  await res.json();
+      const result = await res.json();
       if (!result.success) return;
       dispatch(signOut());
-    }
-    
-    catch (err) {
+    } catch (err) {
       console.log(err);
     }
-  }
+  };
 
   return (
     <div className="p-6 max-w-md mx-auto mt-10">
-      <h1 className="text-2xl font-bold text-slate-800 mb-8 text-center">Your Profile</h1>
+      <h1 className="text-2xl font-bold text-slate-800 mb-8 text-center">
+        Your Profile
+      </h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <input onChange={handleFileChange} type="file" ref={fileRef} className="hidden" accept="image/*" />
+        <input
+          onChange={handleFileChange}
+          type="file"
+          ref={fileRef}
+          className="hidden"
+          accept="image/*"
+        />
         <div className="self-center">
-          <img onClick={() => fileRef.current.click()} src={currentUser.avatar} alt="profile" className="w-20 h-20 rounded-full object-cover cursor-pointer hover:opacity-80 transition" />
-          <p className="text-xs text-center text-slate-400 mt-1">{uploading ? "Uploading..." : "Click to change"}</p>
+          <img
+            onClick={() => fileRef.current.click()}
+            src={currentUser.avatar}
+            alt="profile"
+            className="w-20 h-20 rounded-full object-cover cursor-pointer hover:opacity-80 transition"
+          />
+          <p className="text-xs text-center text-slate-400 mt-1">
+            {uploading ? "Uploading..." : "Click to change"}
+          </p>
         </div>
-        {uploadError && <p className="text-red-400 text-xs text-center">{uploadError}</p>}
-        <input onChange={handleChange} type="text" value={formData.username} id="username" placeholder="Username" className="border border-slate-200 p-3 rounded-xl text-sm outline-none focus:border-slate-400 transition" />
-        <input onChange={handleChange} type="email" value={formData.email} id="email" placeholder="Email" className="border border-slate-200 p-3 rounded-xl text-sm outline-none focus:border-slate-400 transition" />
+        {uploadError && (
+          <p className="text-red-400 text-xs text-center">{uploadError}</p>
+        )}
+        <input
+          onChange={handleChange}
+          type="text"
+          value={formData.username}
+          id="username"
+          placeholder="Username"
+          className="border border-slate-200 p-3 rounded-xl text-sm outline-none focus:border-slate-400 transition"
+        />
+        <input
+          onChange={handleChange}
+          type="email"
+          value={formData.email}
+          id="email"
+          placeholder="Email"
+          className="border border-slate-200 p-3 rounded-xl text-sm outline-none focus:border-slate-400 transition"
+        />
         <div className="relative">
-          <input onChange={handleChange} type={showPassword ? "text" : "password"} value={formData.password} id="password" placeholder="New Password" className="border border-slate-200 p-3 rounded-xl text-sm w-full outline-none focus:border-slate-400 transition" />
-          <span onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-3.5 cursor-pointer text-slate-400">
+          <input
+            onChange={handleChange}
+            type={showPassword ? "text" : "password"}
+            value={formData.password}
+            id="password"
+            placeholder="New Password"
+            className="border border-slate-200 p-3 rounded-xl text-sm w-full outline-none focus:border-slate-400 transition"
+          />
+          <span
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-3 top-3.5 cursor-pointer text-slate-400"
+          >
             {showPassword ? <FaEye /> : <FaEyeSlash />}
           </span>
         </div>
-        <button type="submit" className="bg-slate-800 text-white p-3 rounded-xl text-sm font-medium hover:bg-slate-700 transition mt-1">Update Profile</button>
+        <button
+          type="submit"
+          className="bg-slate-800 text-white p-3 rounded-xl text-sm font-medium hover:bg-slate-700 transition mt-1"
+        >
+          Update
+        </button>
+        <Link
+          to="/create-listing"
+          className="bg-green-600 text-white p-3 rounded-xl text-sm font-medium hover:bg-green-500 transition mt-1 text-center"
+        >
+          Create Listing
+        </Link>
       </form>
       <div className="flex justify-between mt-6 text-sm">
-        <span onClick={handleDeleteAccount} className="text-red-400 cursor-pointer hover:underline">Delete Account</span>
-        <span onClick={handleSignOut} className="text-slate-500 cursor-pointer hover:underline">Sign Out</span>
+        <span
+          onClick={handleDeleteAccount}
+          className="text-red-400 cursor-pointer hover:underline"
+        >
+          Delete Account
+        </span>
+        <span
+          onClick={handleSignOut}
+          className="text-slate-500 cursor-pointer hover:underline"
+        >
+          Sign Out
+        </span>
       </div>
     </div>
   );
