@@ -25,7 +25,6 @@ const handleSignIn = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler("Please enter email and password both", 400));
   }
   const user = await User.findOne({ email }).select("+password");
-  console.log(user.password); // should show hashed string, not undefined
 
   if (!user) {
     return next(new ErrorHandler("Invalid email or password", 401));
