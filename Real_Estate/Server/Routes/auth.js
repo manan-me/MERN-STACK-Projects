@@ -1,10 +1,10 @@
 const express=require("express")
 const router=express.Router()  
 const {handleSignUp,handleSignIn,handleGoogleSignIn,updateUser,deleteUser,handleSignOut}=require("../Controllers/authControllers") 
-const { upload } = require("../config/cloudinary")
+const { uploadAvatar  } = require("../config/cloudinary")
 const { Authorized } = require("../Middleware/auth")
 
-router.put("/update/:id", Authorized, upload.single("avatar"), updateUser)
+router.put("/update/:id", Authorized, uploadAvatar.single("avatar"), updateUser)
 router.delete("/delete/:id", Authorized, deleteUser)
 
 router.post("/sign-up",handleSignUp)

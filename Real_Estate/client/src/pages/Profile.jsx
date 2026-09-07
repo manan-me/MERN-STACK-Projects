@@ -180,6 +180,12 @@ function Profile() {
         >
           Create Listing
         </Link>
+        <Link
+          to="/my-listings"
+          className="block text-center bg-slate-100 text-slate-800 p-3 rounded-lg text-sm font-medium hover:bg-slate-200 transition"
+        >
+          My Listings
+        </Link>
       </form>
       <div className="flex justify-between mt-6 text-sm">
         <span

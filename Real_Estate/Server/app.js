@@ -10,7 +10,6 @@ app.use(cookieParser())
 const userRouter=require("./Routes/user")
 const authRouter=require("./Routes/auth")
 const listingRouter=require("./Routes/listings")
-
 app.use("/api/user",userRouter)
 app.use("/api/auth",authRouter)
 app.use("/api/listings",listingRouter)
